@@ -1,0 +1,226 @@
+<style>
+    tbody tr td {
+        padding: 15px 0px 0px 0px;
+        border-right: none !important;
+        border-left: none !important;
+    }
+
+    .al-sidebar .active {
+        /*color: #3078CD!important;*/
+        color: #fff !important;
+        overflow-y: auto;
+    }
+
+    .activeTr {
+        background-color: #134B80;
+    }
+
+    i {
+        color: #fff;
+    }
+
+    .subt {
+        color: #fff;
+        padding: 0px;
+        margin: 0px;
+        font-size: 10px;
+    }
+
+    .leftLogo {
+        padding: 17px 0;
+        text-align: center;
+    }
+
+    .leftLogo img {
+        width: 32px;
+    }
+
+    .gothicFamily {
+        font-family: 'gothic';
+    }
+
+    .subt,
+    .subt:hover {
+        color: #fff !important;
+    }
+    /* i.active, i.inactive {font-size:30px;cursor:pointer;}
+	i.active, i.inactive {font-size:30px;cursor:pointer;} */
+	i.fa-toggle-on.active { color: #024a97 !important;}
+    i.fa-toggle-on.inactive {color: white !important;}
+    .location-text {
+        text-align: center;
+        font-size: 9px;
+        padding-top: 0px;
+        cursor: pointer;
+    }
+
+    .toggle-button {
+        text-align: center;
+    }
+    .fa-toggle-on {
+        font-size: 30px !important;
+        cursor: pointer;
+    }
+    .location-image {
+        cursor: pointer;
+    }
+    
+</style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+<aside class="al-sidebar gothicFamily" ng-style="GENERICS.left_sidebar.bgColor" ng-swipe-right="$baSidebarService.setMenuCollapsed(false)"
+    ng-swipe-left="$baSidebarService.setMenuCollapsed(true)" ng-mouseleave="hoverElemTop=selectElemTop" style="top:0px!important;">
+    <div class="leftLogo" ng-style="GENERICS.left_sidebar.logoDem">
+        <img alt="LOGO" ng-src="assets/generic/img/{{GENERICS.left_sidebar.logo_url}}">
+    </div>
+    <div clas="gothicFamily">
+        <table class="gothicFamily" style="width:100%;height: 40%; padding-top: 66px">
+          
+            <table class="gothicFamily" style="width:100%;height: 40%; padding-top: 66px">
+                <tr style="height:15%;text-align: center;">
+                    <td>
+                        <div style="text-align: center">
+
+                            <a ui-sref="home" title="Livetracking" class="subt gothicFamily">
+                                <i class="fa fa-tasks" aria-hidden="true" ng-style="GENERICS.left_sidebar.icon"></i>
+                                <br> Live Tracking
+                            </a>
+
+                        </div>
+                        <div class="menuItems my_trips" style="padding-top:3%;">
+                            <a class="myTripsNew"></a>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height:15%;text-align: center;">
+                    <td>
+                        <div style="text-align: center">
+
+                            <a ui-sref="heat" title="Livetracking" class="subt gothicFamily">
+                                <i class="fa fa-map-marker" aria-hidden="true" ng-style="GENERICS.left_sidebar.icon"></i>
+                                <br> Heat Map
+                            </a>
+
+                        </div>
+                        <div class="menuItems my_trips" style="padding-top:3%;">
+                            <a class="myTripsNew"></a>
+                        </div>
+                    </td>
+                </tr>
+       
+
+    <tr style="height:15% " ng-init="initCities()">
+        <td>
+            <div style="text-align: center; margin-bottom: 26px">
+               
+                <a ng-click="showConfirm($event)" title="Logout" class="subt gothicFamily">
+                    <i class="fa fa-sign-out" aria-hidden="true" ng-style="GENERICS.left_sidebar.icon"></i>
+                    <br> Logout
+                   
+                </a>
+            </div>
+            <div class="menuItems free_rides" style="padding-top:3%;text-align: center">
+                <a class="myTripsNew"></a>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="toggle-button" ng-init="init()">
+                  <i class="fa fa-toggle-on active"
+                  ng-if="status == true"
+                     ng-click="changeStatus();">
+                  </i>
+                  <i class="fa fa-toggle-on fa-rotate-180 inactive"
+                  ng-if="status == false"
+                     ng-click="changeStatus();">
+                  </i>
+            </div>
+        </td>
+    </tr>
+    <tr><td class="location-text">Car Info</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+                    ng-if="statusCity == 0"
+                    ng-click="presetzoomNewyork(0)">
+            <img class="location-image" src = "assets/img/address.png"
+                    ng-if="statusCity != 0"
+                    ng-click="presetzoomNewyork(0)">
+        </div>
+    </td></tr>
+    
+    <tr><td class="location-text" ng-click="presetzoomNewyork(0)">New York</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+                    ng-if="statusCity == 1"
+                    ng-click="presetzoomNewyork(1)">
+            <img class="location-image" src = "assets/img/address.png"
+                    ng-if="statusCity != 1"
+                    ng-click="presetzoomNewyork(1)">
+        </div>
+    </td></tr>
+    
+    <tr><td class="location-text" ng-click="presetzoomNewyork(1)">Brooklyn</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+            ng-if="statusCity == 2"
+            ng-click="presetzoomNewyork(2)">
+            <img class="location-image" src = "assets/img/address.png"
+            ng-if="statusCity != 2"
+            ng-click="presetzoomNewyork(2)">
+        </div>
+    </td></tr>
+    
+    <tr><td class="location-text" ng-click="presetzoomNewyork(2)">Manhattan</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+                    ng-if="statusCity == 3"
+                    ng-click="presetzoomNewyork(3)">
+            <img class="location-image" src = "assets/img/address.png"
+                    ng-if="statusCity != 3"
+                    ng-click="presetzoomNewyork(3)">
+        </div>
+    </td></tr>
+    
+    <tr><td class="location-text" ng-click="presetzoomNewyork(3)">Bronx</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+                    ng-if="statusCity == 4"
+                    ng-click="presetzoomNewyork(4)">
+            <img class="location-image" src = "assets/img/address.png"
+                    ng-if="statusCity != 4"
+                    ng-click="presetzoomNewyork(4)">
+        </div>
+    </td></tr>
+    
+    <tr><td class="location-text" ng-click="presetzoomNewyork(4)">Queens</td></tr>
+    <tr><td>
+        <div class="toggle-button">
+            <img class="location-image" src = "assets/img/address_activate.png"
+                    ng-if="statusCity == 5"
+                    ng-click="presetzoomNewyork(5)">
+            <img class="location-image" src = "assets/img/address.png"
+                    ng-if="statusCity != 5"
+                    ng-click="presetzoomNewyork(5)">
+        </div>
+    </td></tr>
+    <tr><td class="location-text" ng-click="presetzoomNewyork(5)">Long Island</td></tr>
+    </table>
+    </div>
+    <div class="sidebar-hover-elem" ng-style="{top: hoverElemTop + 'px', height: hoverElemHeight + 'px'}" ng-class="{'show-hover-elem': showHoverElem }"></div>
+</aside>
+<script>
+    $(document).ready(function () {
+        $('a').click(function () {
+            $('a').removeClass("active");
+            $('tr').removeClass("activeTr");
+            $(this).addClass("active");
+            $(this).closest('tr').addClass("activeTr");
+            //   $('p').addClass("active");
+        });
+    });
+</script>
