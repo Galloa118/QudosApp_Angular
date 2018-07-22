@@ -267,7 +267,6 @@
                 });
                 
                 socketFactory.on('completedRides', function(data) {
-                    console.log('data in Completed--------', data);
                     $scope.sockoc=data[0].data.paginated_rides;
                     $scope.completedRides=$scope.sockoc;
                 });
@@ -281,12 +280,10 @@
                     var scheduledrides = data[0].data.SCHEDULED;
                     scheduledrides.sort(compare);
                     $scope.scheduledrides=scheduledrides;
-                    console.log("completedScheduleRides------", data[0].data.SCHEDULED);
                 });
                   
                   
                 socketFactory.on('scheduledRides', function(data) {
-                    console.log('---------------data in Scheduled',data);
                     $scope.sockos=data[0].data.paginated_schedules;
                     $scope.scheduled_rides=$scope.sockos;
 
@@ -335,11 +332,13 @@
                 
                 socketFactory.on('availableDrivers', function(data) {
                     $scope.avail=data[0].data.paginated_drivers;
-                    // console.log('--------------available',$scope.avail);
+                    // console.log('--------------available',$scope.avail[1]);
                     
                     if($scope.select.selectedIndex == 3) { //} || $scope.select.selectedIndex == 3) { // for available and all
-                    var url = 'assets/img/driver_idle.svg';
-                    var urlGoing = 'assets/img/driver_intransit.svg';
+                    // var url = 'assets/img/driver_idle.svg';
+                    // var urlGoing = 'assets/img/driver_intransit.svg';
+                    var url;
+                    var urlGoing;
                     var image = {
                         url: url,
                         scaledSize: new google.maps.Size(33, 33),
@@ -352,6 +351,16 @@
                     });
                     //console.log('Driver Data',$scope.l);
                     for (var i = 0; i < $scope.avl.length; i++) {
+                        if($scope.avail[i].car_type == 1) {
+                            url = 'assets/carTypeImage/QLE/3_White_QLE.svg';
+                            urlGoing = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
+                        } else if($scope.avail[i].car_type == 2) {
+                            url = 'assets/carTypeImage/LUXE/3_White_LUXE.svg';
+                            urlGoing = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
+                        } else if($scope.avail[i].car_type == 3) {
+                            url = 'assets/carTypeImage/Grande/3_White_Grande.svg';
+                            urlGoing = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
+                        }
                         var infowindow = new google.maps.InfoWindow({
                             content: "<div id='" + $scope.avail[i].driver_id + "'>" +
                             "<span>Name</span> : <span>" + $scope.avail[i].driver_name + "</span><br>" +
@@ -386,7 +395,8 @@
                     // }
                     // if($scope.select.selectedIndex == 1) { //|| $scope.select.selectedIndex == 3){ // for busy and all
                     if($scope.select.selectedIndex == 1 || $scope.select.selectedIndex == 3){ // for busy and all
-                        var url = 'assets/img/driver_intransit.svg';
+                        // var url = 'assets/img/driver_intransit.svg';
+                        var url;
                         var image = {
                             url: url, // image is 512 x 512
                             scaledSize: new google.maps.Size(33, 33),
@@ -399,8 +409,13 @@
                         });
                         //console.log(' buzy dri', $scope.bzy);
                         for (var i = 0; i < $scope.bzy.length; i++) {
-                            // var position = new google.maps.LatLng($scope.bzy[i].current_location_latitude, $scope.bzy[i].current_location_longitude);
-                            //bounds.extend(position);
+                            if($scope.avail[i].car_type == 1) {
+                                url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
+                            } else if($scope.avail[i].car_type == 2) {
+                                url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
+                            } else if($scope.avail[i].car_type == 3) {
+                                url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
+                            }
                             var infowindow = new google.maps.InfoWindow({
                                 content: "<div>" +
                                 "<span>Name</span> : <span>" + $scope.busy[i].driver_name + "</span><br>" +
@@ -428,7 +443,8 @@
                     //console.log("BUSY",$scope.busy);
 
                                 if($scope.select.selectedIndex == 1) { //|| $scope.select.selectedIndex == 3){ // for busy and all
-                        var url = 'assets/img/driver_intransit.svg';
+                        // var url = 'assets/img/driver_intransit.svg';
+                        var url;
                         var image = {
                             url: url, // image is 512 x 512
                             scaledSize: new google.maps.Size(33, 33),
@@ -443,6 +459,13 @@
                         for (var i = 0; i < $scope.bzy.length; i++) {
                             // var position = new google.maps.LatLng($scope.bzy[i].current_location_latitude, $scope.bzy[i].current_location_longitude);
                             //bounds.extend(position);
+                            if($scope.avail[i].car_type == 1) {
+                                url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
+                            } else if($scope.avail[i].car_type == 2) {
+                                url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
+                            } else if($scope.avail[i].car_type == 3) {
+                                url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
+                            }
                             var infowindow = new google.maps.InfoWindow({
                                 content: "<div>" +
                                 "<span>Name</span> : <span>" + $scope.busy[i].driver_name + "</span><br>" +
@@ -465,7 +488,8 @@
                 socketFactory.on('offlineDrivers', function(data) {
                     $scope.offline=data[0].data.paginated_drivers;
                     //console.log("BUSY",$scope.busy);
-                    var url = 'assets/img/driver_offline.svg';
+                    // var url = 'assets/img/driver_offline.svg';
+                    var url;
                     var image = {
                         url: url, // image is 512 x 512
                         scaledSize: new google.maps.Size(33, 33),
@@ -473,6 +497,13 @@
                     };
                    
                     for (var i = 0; i < $scope.offline.length; i++) {
+                        if($scope.avail[i].car_type == 1) {
+                            url = 'assets/carTypeImage/QLE/1_Grey_QLE.svg';
+                        } else if($scope.avail[i].car_type == 2) {
+                            url = 'assets/carTypeImage/LUXE/1_Grey_LUXE.svg';
+                        } else if($scope.avail[i].car_type == 3) {
+                            url = 'assets/carTypeImage/Grande/1_Grey_Grande.svg';
+                        }
                         var infowindow = new google.maps.InfoWindow({
                             content: "<div>" +
                             "<span>Name</span> : <span>" + $scope.offline[i].driver_name + "</span><br>" +
