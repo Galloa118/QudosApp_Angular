@@ -202,9 +202,9 @@
 	<div class="ba-panelL">
 		<input type="search" id="search" name="search" placeholder="Search.." ng-model="data"
 		       ng-change="searchL(data, left.selectedIndex)">
-		<md-content>
-			<md-tabs md-dynamic-height md-border-bottom md-selected="left.selectedIndex">
-				<md-tab label="{{totalItemsOngoing}} ONGOING" id="ongoing" ng-click="collapseDisc()">
+		<md-content style="height: 100%">
+			<md-tabs md-dynamic-height md-border-bottom md-selected="left.selectedIndex" style="height: 100%">
+				<md-tab label="{{totalItemsOngoing}} ONGOING" id="ongoing" ng-click="collapseDisc()" style="height: 100%">
 					<md-content class="md-padding">
 
 						<table>
@@ -223,7 +223,6 @@
 									<p style="color:rgba(0,0,0,.5);">{{data.user_name}}</p>
 								</td>
 								
-								<!-- <td class="tDataSelf" ng-if="data.ride_status==1"> -->
 								<td class="tDataSelf" style="width: 100px !important;">
 									<div class="button_group" style="display: grid;">
 										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.driver_id == specialid ? 'Route On' : 'Route Off' }}
@@ -239,111 +238,38 @@
 									<img style="float: right;" src="assets/img/forward.svg" ng-click="expandDisc(data)">
 								</td>
 							</tr>
-							<!-- TODO: Dynamic tabs -->
-							<!-- <md-tab label= "{{totalItemsScheduled}} SCHEDULED" id="scheduled" ng-click="collapseDisc()" >
-								<div class="md-padding" ng-style="GENERICS.dahboard.leftPane">
-									<table>
-										<tr ng-repeat="data in scheduled_rides" ng-style="dashboardCss.scheduled_rides">
-											<td class="tDataSelf"><button type="button" ng-style="GENERICS.dashboard.discountBtn" class="btn" id="butOne">S</button><br><h1 class="driverNameCus">{{data.user_name}}</h1></td>
-											<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg"></td>
-											<td class="tDataSelf" style="padding-left:5%!important"><h1 class="dateDetails">{{data.pickup_time|date:'MM/dd/yyyy'}}</h1><p>{{data.pickup_time|date:'hh-mm a'}}</p>{{data.user_name}}</td>
-						
-											<td class="tDataSelf" ng-if="expand">
-												<md-button id="but2" ng-click="showonm(data)" class="md-raised" ng-style="GENERICS.dashboard.scheduleBtn">SCHEDULED</md-button>
-												<br>
-												<img id="{{ 'object-' + $index }}" style="float:right;" src="assets/img/forward.svg" ng-click="expandDisc(data,$index); check($index)"></td>
-											<td class="tDataSelf" ng-if="(expand)"><md-button id="but3" ng-click="showonm(data)" class="md-raised ">SCHEDULED</md-button><br><img  style="float:right;padding:15px 0 0 0;" src="assets/img/forward.svg" ng-click="expandDisc(data,data.index)"></td>
-										</tr>
-									</table>
-								</div>
-							</md-tab> -->
-							<!-- <tr style="border-bottom: 1px solid rgba(0,0,0,.14);" ng-if="data.ride_status==3">
-								<td class="tDataSelf alignCenter"><img ng-src="{{data.driver_image}}"
-								                                       style="border-radius:50%" height="50px"
-								                                       width="50px"><br>
-									<h1 class="driverNameCus">{{data.driver_name}}</td>
-								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg">
-								</td>
-								
-								<td class="tDataSelf infoBlock">
-									<h1 class="dateDetails">{{data.start_time|date:'MM/dd/yyyy'}}</h1>
-									<h1 class="dateDetails">{{data.start_time|date:'hh-mm a'}}</h1>
-									<p style="color:rgba(0,0,0,.5);">{{data.user_name}}</p>
-								</td> -->
-								
-								<!-- <td class="tDataSelf" ng-if="data.ride_status==1"> -->
-								<!-- <td class="tDataSelf" style="width: 100px !important;">
-									<div class="button_group" style="display: grid;" ng-init="init()">
-										<button id="but1_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;"
-												ng-if="status == true" ng-click="showonm(data)" class="btn btn-secondary">Route On
-										</button>
-										<button id="but1_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;"
-												ng-if="status == false" ng-click="removeRoute()" class="btn btn-secondary">Route Off
-										</button>
-										<button id="but1" style="width: 90px;min-height: 28px !important;"
-												class="btn btn-secondary">Accepted
-										</button>
-									</div>
-								</td>
-								<td class="tDataSelf" style="width: 10px !important;"> -->
-									<!-- <div class="forward_image"> -->
-										<!-- <img style="float: right;" src="assets/img/forward.svg"
-											 ng-click="expandDisc(data)"> -->
-									<!-- </div> -->
-								<!-- </td>
-							</tr> -->
 
-							<!--  arrived  -->
-							<!-- <tr style="border-bottom: 1px solid rgba(0,0,0,.14);" ng-if="data.ride_status==2">	
-									<td class="tDataSelf alignCenter"><img ng-src="{{data.driver_image}}"
-										style="border-radius:50%" height="50px"
+							<tr ng-repeat="data in completedrides" style="border-bottom: 1px solid rgba(0,0,0,.14);">
+								
+								<td class="tDataSelf alignCenter"><img ng-src="{{data.driver_image}}"
+																		style="border-radius:50%" height="50px"
 																		width="50px"><br>
 									<h1 class="driverNameCus">{{data.driver_name}}</td>
 								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg">
 								</td>
 								
 								<td class="tDataSelf infoBlock">
-									<h1 class="dateDetails">{{data.start_time|date:'MM/dd/yyyy'}}</h1>
-									<h1 class="dateDetails">{{data.start_time|date:'hh-mm a'}}</h1>
 									<p style="color:rgba(0,0,0,.5);">{{data.user_name}}</p>
 								</td>
+								
 								<td class="tDataSelf" style="width: 100px !important;">
-									<div class="button_group" style="display: grid;" ng-init="init()">
-										<button id="but3_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;"
-										        ng-click="showonm(data)" class="btn btn-secondary">{{ status ? 'Route On' : 'Route Off' }}
-										</button> -->
-										<!-- <button id="but3_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;"
-												ng-if="status == false" ng-click="removeRoute()" class="btn btn-secondary">
-										</button> -->
-										<!-- <button id="but3" style="width: 90px;min-height: 28px !important;"
-												class="btn btn-secondary">Arrived
+									<div class="button_group" style="display: grid;">
+										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.driver_id == specialid ? 'Route On' : 'Route Off' }}
 										</button>
+										
+										<button id="but1" style="width: 90px;min-height: 28px !important;"
+												class="btn btn-secondary">Completed
+										</button>
+										
 									</div>
 								</td>
-								<td class="tDataSelf" style="width: 10px !important;"> -->
-									<!-- <div class="forward_image"> -->
-										<!-- <img style="float: right;" src="assets/img/forward.svg"
-												ng-click="expandDisc(data)"> -->
-									<!-- </div> -->
-								<!-- </td> -->
-								<!-- <td class="tDataSelf" ng-if="data.ride_status==2">
-									<button id="but3" style="width: 90px;min-height: 28px !important;"
-									        ng-click="showonm(data)" class="btn btn-secondary">Arrived
-									</button>
-									<br>
-									<img style="float: right;padding: 15px 0 0 0;" src="assets/img/forward.svg"
-									     ng-click="expandDisc(data)">
-								</td> -->
-								
-								<!-- <td class="tDataSelf" ng-if="data.ride_status==3">
-									<button id="but2" style="width: 90px;min-height: 28px !important;"
-									        ng-click="showonm(data)" class="btn btn-secondary">En Route
-									</button>
-									<br>
-									<img style="float: right;padding: 15px 0 0 0;" src="assets/img/forward.svg"
-									     ng-click="expandDisc(data)">
-								</td> -->
-							<!-- </tr> -->
+								<td class="tDataSelf" style="width: 10px !important;">
+									<img style="float: right;" src="assets/img/forward.svg" ng-click="expandDisc(data)">
+								</td>
+							</tr>
+
+							<!-- TODO: Dynamic tabs -->
+
 
 						</table>
 						<div>
@@ -353,7 +279,39 @@
 						</div>
 					</md-content>
 				</md-tab>
-				
+				<md-tab label= "{{totalItemsScheduled}} SCHEDULED" id="scheduled" ng-click="collapseDisc()" >
+					<div class="md-padding" ng-style="GENERICS.dahboard.leftPane">
+						<table>
+							<tr ng-repeat="data in scheduledrides" ng-style="dashboardCss.scheduled_rides">
+								<td class="tDataSelf"><button type="button" ng-style="GENERICS.dashboard.discountBtn" class="btn" id="butOne">S</button><br>
+									<h1 class="driverNameCus">{{data.user_name}}</h1>
+								</td>
+
+								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg"></td>
+
+								<td class="tDataSelf" style="padding-left:5%!important">
+									<h1 class="dateDetails">{{data.pickup_time|date:'MM/dd/yyyy'}}</h1>
+									<p>{{data.pickup_time|	date:'hh-mm a'}}</p>{{data.user_name}}
+								</td>
+								
+								<td class="tDataSelf" ng-if="expand">
+									<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.user_id == specialid ? 'Route On' : 'Route Off' }}
+									</button>
+									<button id="but2" style="background-color:rgb(16, 108, 200); color: white; width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-primary">Scheduled</button>
+									<br>
+								</td>
+
+								<td class="tDataSelf" ng-if="expand">
+									<img id="{{ 'object-' + $index }}" style="float:right;" src="assets/img/forward.svg" ng-click="expandDisc(data,$index); check($index)">
+								</td>
+								<!-- <td class="tDataSelf" ng-if="(expand)">
+									<md-button id="but3" ng-click="showonm(data)" class="md-raised ">SCHEDULED</md-button><br>
+									<img style="float:right;padding:15px 0 0 0;" src="assets/img/forward.svg" ng-click="expandDisc(data,data.index)">
+								</td> -->
+							</tr>
+						</table>
+					</div>
+				</md-tab>
 			</md-tabs>
 		</md-content>
 	</div>

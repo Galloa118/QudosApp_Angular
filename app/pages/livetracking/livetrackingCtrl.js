@@ -13,25 +13,25 @@
 
         //socket init
         var token = localStorage.getItem('access_token');
-        console.log(token);
+        // console.log(token);
         socketFactory.init();
-        console.log('$window.socket',$window.socket)
+        // console.log('$window.socket',$window.socket)
         $window.socket.emit('auth', {user_type: 'admin', access_token: token});
 
         $scope.check = function (id) {
-            console.log(id);
+            // console.log(id);
             var ids = 'object-' + id;
-            console.log(ids);
+            // console.log(ids);
             $scope.showim = !$scope.showim;
-            console.log($scope.showim);
+            // console.log($scope.showim);
             if ($scope.showim == '0') {
-                console.log("Working");
+                // console.log("Working");
                 $scope.collapseDisc();
 
             }
         }
         $scope.togRight = function (daa) {
-            console.log(daa);
+            // console.log(daa);
             ngDialog.open({
                 template: 'driverDetails',
                 className: 'ngdialog-theme-default',
@@ -215,6 +215,7 @@
 
             socketFactory.emit('counterRides', {action: 0, region_id:0});
             socketFactory.emit('ongoingRides', {action: 0, region_id:0});
+            socketFactory.emit('completedScheduleRides', {action: 0, region_id:0});
             socketFactory.emit('completedRides', {action: 0, region_id:0, limit:5});
             socketFactory.emit('scheduledRides', {action: 0, region_id:0});
             socketFactory.emit('availableDrivers', {offset:0,limit:10,action:0});
@@ -227,6 +228,7 @@
                 $interval(function(){
                     socketFactory.emit('counterRides', {action: 0, region_id:0});
                     socketFactory.emit('ongoingRides', {action: 0, region_id:0});
+                    socketFactory.emit('completedScheduleRides', {action: 0, region_id:0})
                     socketFactory.emit('completedRides', {action: 0, region_id:0, limit:5});
                     socketFactory.emit('scheduledRides', {action: 0, region_id:0});
                     socketFactory.emit('availableDrivers', {offset:0,limit:10,action:0});
@@ -236,7 +238,7 @@
                 },2000)
 
                 socketFactory.on('counterRides', function(data) {
-                    //console.log('datadatadatadatadatadata', data);
+                    // console.log('datadatadatadatadatadata', data);
                     $scope.sock1=data[0].data;
                     $scope.totalItemsOngoing=$scope.sock1.ONGOING;
                     $scope.totalItemsScheduled=$scope.sock1.SCHEDULED;
@@ -244,30 +246,50 @@
                 });
 
                 socketFactory.on('ongoingRides', function(data) {
-                    let history = [];
-                    for (let i = 1; i <= 4; i++) {
-                        for (let ride of data[0].data.paginated_rides) {
-                            if (i <= ride.ride_status) {
-                                ride = {...ride}
-                                ride.ride_status = i;
-                                history.push(ride)
-                            }
-                        }
-                    }
-                    console.log(history)
-                    $scope.onGoingRidePag = history
+                    // let history = [];
+                    // for (let i = 1; i <= 4; i++) {
+                    //     if (i == 2 | i == 3) {
+                    //         continue;
+                    //     } else {
+                    //         for (let ride of data[0].data.paginated_rides) {
+                    //             if (i <= ride.ride_status) {
+                    //                 ride = {...ride}
+                    //                 ride.ride_status = i;
+                    //                 history.push(ride);
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                    // console.log(data[0].data.paginated_rides);
+                    // console.log("---------ongoing", data[0].data.paginated_rides);
+                    // $scope.onGoingRidePag = history;
+                    $scope.onGoingRidePag = data[0].data.paginated_rides;
                 });
                 
                 socketFactory.on('completedRides', function(data) {
-                    //console.log('data in Completed',data);
+                    console.log('data in Completed--------', data);
                     $scope.sockoc=data[0].data.paginated_rides;
                     $scope.completedRides=$scope.sockoc;
                 });
 
+                socketFactory.on('completedScheduleRides', function(data) {
+                    var compare = function(a, b) {
+                        return new Date(b.pickup_time) - new Date(a.pickup_time);
+                    }
+    
+                    $scope.completedrides=data[0].data.COMPLETED;
+                    var scheduledrides = data[0].data.SCHEDULED;
+                    scheduledrides.sort(compare);
+                    $scope.scheduledrides=scheduledrides;
+                    console.log("completedScheduleRides------", data[0].data.SCHEDULED);
+                });
+                  
+                  
                 socketFactory.on('scheduledRides', function(data) {
-                    //console.log('data in Scheduled',data);
+                    console.log('---------------data in Scheduled',data);
                     $scope.sockos=data[0].data.paginated_schedules;
                     $scope.scheduled_rides=$scope.sockos;
+
                     $scope.p=new Array();
                     _.each($scope.sockos,function(key,value){
                         $scope.p.push(_.pick(key,'pickup_latitude','pickup_longitude'));
@@ -614,14 +636,22 @@
 
         $scope.showonm = function(data) {
             // console.log("showonm", $scope.specialid, data);
-            var id = data.driver_id;
-            // console.log($scope.specialid)
+            var id;
+            if ('driver_id' in data) {
+                id = data.driver_id;
+            } else if (data.user_id) {
+                id = data.user_id;
+            }
             if ($scope.specialid == id) {
                 directionsDisplay.setMap(null);
                 $scope.specialid = -1;
             } else {
                 $scope.specialid = id;
-                $scope.strtloca = data.pickup_latitude + ',' + data.pickup_longitude;
+                if (data.pickup_latitude) {
+                    $scope.strtloca = data.pickup_latitude + ',' + data.pickup_longitude;
+                } else {
+                    $scope.strtloca = data.latitude + ',' + data.longitude;
+                }
                 $scope.mdes = data.manual_destination_latitude + ','+ data.manual_destination_longitude;
                 $scope.getDirections();
             }
@@ -651,7 +681,7 @@
         
         $rootScope.$watch('status', function(newValue, oldValue) {
             // console.log(newValue, oldValue)
-            for(let marker of markers) {
+            // for(let marker of markers) {
                 if(!newValue) {
                     $('div.custom-close').parent().css({opacity: 0})
                     // marker.marker.infoWindow.close();
@@ -659,7 +689,7 @@
                     $('div.custom-close').parent().css({opacity: 1})
                     // new google.maps.event.trigger( marker.marker, 'click' );
                 }
-            }
+            // }
         });
         
         $rootScope.$watch('statusCity', function(newValue, oldValue) {
