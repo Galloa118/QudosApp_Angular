@@ -228,7 +228,7 @@
                 $interval(function(){
                     socketFactory.emit('counterRides', {action: 0, region_id:0});
                     socketFactory.emit('ongoingRides', {action: 0, region_id:0});
-                    socketFactory.emit('completedScheduleRides', {action: 0, region_id:0})
+                    socketFactory.emit('completedScheduleRides', {action: 0, region_id:0});
                     socketFactory.emit('completedRides', {action: 0, region_id:0, limit:5});
                     socketFactory.emit('scheduledRides', {action: 0, region_id:0});
                     socketFactory.emit('availableDrivers', {offset:0,limit:10,action:0});
@@ -275,11 +275,21 @@
                     var compare = function(a, b) {
                         return new Date(b.pickup_time) - new Date(a.pickup_time);
                     }
-    
-                    $scope.completedrides=data[0].data.COMPLETED;
+                    var comparecompleted = function(a, b) {
+                        return new Date(b.start_time) - new Date(a.start_time);
+                    }
+                    var completedrides = data[0].data.COMPLETED;
+                    completedrides.sort(comparecompleted);
                     var scheduledrides = data[0].data.SCHEDULED;
                     scheduledrides.sort(compare);
-                    $scope.scheduledrides=scheduledrides;
+                    $scope.completedrides = completedrides;
+                    $scope.completedrides.map(ride => {
+                        if (ride.driver_image) {
+                            ride.driver_image = ride.driver_image.replace('http://', 'https://');
+                        }
+                    })
+                    $scope.scheduledrides = scheduledrides;
+                    // console.log("--------------", data[0].data.COMPLETED);
                 });
                   
                   
@@ -351,13 +361,16 @@
                     });
                     //console.log('Driver Data',$scope.l);
                     for (var i = 0; i < $scope.avl.length; i++) {
-                        if($scope.avail[i].car_type == 1) {
+                        if($scope.avail[i].car_type == 2) {
                             url = 'assets/carTypeImage/QLE/3_White_QLE.svg';
                             urlGoing = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
-                        } else if($scope.avail[i].car_type == 2) {
+                        } else if($scope.avail[i].car_type == 1) {
+                            url = 'assets/img/driver_idle.svg';
+                            urlGoing = 'assets/img/driver_intransit.svg';
+                        } else if($scope.avail[i].car_type == 3) {
                             url = 'assets/carTypeImage/LUXE/3_White_LUXE.svg';
                             urlGoing = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
-                        } else if($scope.avail[i].car_type == 3) {
+                        } else if($scope.avail[i].car_type == 4) {
                             url = 'assets/carTypeImage/Grande/3_White_Grande.svg';
                             urlGoing = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                         }
@@ -409,11 +422,13 @@
                         });
                         //console.log(' buzy dri', $scope.bzy);
                         for (var i = 0; i < $scope.bzy.length; i++) {
-                            if($scope.avail[i].car_type == 1) {
+                            if($scope.avail[i].car_type == 2) {
                                 url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
-                            } else if($scope.avail[i].car_type == 2) {
-                                url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
+                            } else if($scope.avail[i].car_type == 1) {
+                                url = 'assets/img/driver_intransit.svg';
                             } else if($scope.avail[i].car_type == 3) {
+                                url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
+                            } else if($scope.avail[i].car_type == 4) {
                                 url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                             }
                             var infowindow = new google.maps.InfoWindow({
@@ -461,6 +476,8 @@
                             //bounds.extend(position);
                             if($scope.avail[i].car_type == 1) {
                                 url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
+                            } else if($scope.avail[i].car_type == 1) {
+                                url = 'assets/img/driver_intransit.svg';
                             } else if($scope.avail[i].car_type == 2) {
                                 url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
                             } else if($scope.avail[i].car_type == 3) {
@@ -497,11 +514,13 @@
                     };
                    
                     for (var i = 0; i < $scope.offline.length; i++) {
-                        if($scope.avail[i].car_type == 1) {
+                        if($scope.avail[i].car_type == 2) {
                             url = 'assets/carTypeImage/QLE/1_Grey_QLE.svg';
-                        } else if($scope.avail[i].car_type == 2) {
-                            url = 'assets/carTypeImage/LUXE/1_Grey_LUXE.svg';
+                        } else if($scope.avail[i].car_type == 1) {
+                            url = 'assets/img/driver_offline.svg';
                         } else if($scope.avail[i].car_type == 3) {
+                            url = 'assets/carTypeImage/LUXE/1_Grey_LUXE.svg';
+                        } else if($scope.avail[i].car_type == 4) {
                             url = 'assets/carTypeImage/Grande/1_Grey_Grande.svg';
                         }
                         var infowindow = new google.maps.InfoWindow({

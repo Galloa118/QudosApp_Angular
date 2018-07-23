@@ -241,14 +241,17 @@
 
 							<tr ng-repeat="data in completedrides" style="border-bottom: 1px solid rgba(0,0,0,.14);">
 								
-								<td class="tDataSelf alignCenter"><img ng-src="{{data.driver_image}}"
-																		style="border-radius:50%" height="50px"
-																		width="50px"><br>
-									<h1 class="driverNameCus">{{data.driver_name}}</td>
+								<td class="tDataSelf alignCenter">
+									<img ng-src="{{data.driver_image}}" style="border-radius:50%" height="50px" width="50px">
+									<br>
+								</td>
 								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg">
 								</td>
 								
-								<td class="tDataSelf infoBlock">
+								<td class="tDataSelf infoBlock" style="text-align: center;">
+									<h1 class="dateDetails">{{data.start_time|date:'MM/dd/yyyy'}}</h1>
+									<h1 class="dateDetails">{{data.start_time|date:'HH:mm a'}}</h1>
+									<h1 class="driverNameCus">{{data.driver_name}}
 									<p style="color:rgba(0,0,0,.5);">{{data.user_name}}</p>
 								</td>
 								
@@ -291,7 +294,7 @@
 
 								<td class="tDataSelf" style="padding-left:5%!important">
 									<h1 class="dateDetails">{{data.pickup_time|date:'MM/dd/yyyy'}}</h1>
-									<p>{{data.pickup_time|	date:'hh-mm a'}}</p>{{data.user_name}}
+									<p>{{data.pickup_time|	date:'HH:mm a'}}</p>{{data.user_name}}
 								</td>
 								
 								<td class="tDataSelf" ng-if="expand">
