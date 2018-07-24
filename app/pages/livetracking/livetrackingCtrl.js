@@ -264,6 +264,11 @@
                     // console.log("---------ongoing", data[0].data.paginated_rides);
                     // $scope.onGoingRidePag = history;
                     $scope.onGoingRidePag = data[0].data.paginated_rides;
+                    $scope.onGoingRidePag.map(ride => {
+                        if (ride.driver_image) {
+                            ride.driver_image = ride.driver_image.replace('http://', 'https://');
+                        }
+                    })
                 });
                 
                 socketFactory.on('completedRides', function(data) {
@@ -289,6 +294,7 @@
                         }
                     })
                     $scope.scheduledrides = scheduledrides;
+
                     // console.log("--------------", data[0].data.COMPLETED);
                 });
                   
@@ -301,7 +307,6 @@
                     _.each($scope.sockos,function(key,value){
                         $scope.p.push(_.pick(key,'pickup_latitude','pickup_longitude'));
                     });
-                    console.log('Pick',$scope.p);
                     var image = {
                         url: 'assets/img/intransit_pickup.png', // image is 512 x 512
                         scaledSize: new google.maps.Size(13, 22)
@@ -341,7 +346,7 @@
                 
                 
                 socketFactory.on('availableDrivers', function(data) {
-                    $scope.avail=data[0].data.paginated_drivers;
+                    $scope.avail = data[0].data.paginated_drivers;
                     // console.log('--------------available',$scope.avail[1]);
                     
                     if($scope.select.selectedIndex == 3) { //} || $scope.select.selectedIndex == 3) { // for available and all
@@ -396,7 +401,7 @@
                 });
 
                 socketFactory.on('ongoingRides', function(data) {
-                    $scope.busy=data[0].data.paginated_rides;
+                    $scope.busy = data[0].data.paginated_rides;
                     var ids = [];
                     for (let paginated_ride of $scope.busy) {
                         ids.push(paginated_ride.driver_id);
@@ -421,14 +426,14 @@
                             $scope.bzy.push(_.pick(key, 'current_location_latitude', 'current_location_longitude'));
                         });
                         //console.log(' buzy dri', $scope.bzy);
-                        for (var i = 0; i < $scope.bzy.length; i++) {
-                            if($scope.avail[i].car_type == 2) {
+                        for (var i = 0; i < $scope.busy.length; i++) {
+                            if($scope.busy[i].car_type == 2) {
                                 url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
-                            } else if($scope.avail[i].car_type == 1) {
+                            } else if($scope.busy[i].car_type == 1) {
                                 url = 'assets/img/driver_intransit.svg';
-                            } else if($scope.avail[i].car_type == 3) {
+                            } else if($scope.busy[i].car_type == 3) {
                                 url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
-                            } else if($scope.avail[i].car_type == 4) {
+                            } else if($scope.busy[i].car_type == 4) {
                                 url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                             }
                             var infowindow = new google.maps.InfoWindow({
@@ -445,16 +450,16 @@
                                           //     this.infoWindow.open(map, this);
                                           // });
                                           //rotation = rotation >= 360 ? 0 : rotation + 10;
-                                          }
+                        }
                                           //$scope.select.selectedIndex == 1 && map.fitBounds(bounds);
-                                          }
-                                          });
+                    }
+                });
 
 
                          
 
                 socketFactory.on('busyDrivers', function(data) {
-                    $scope.busy=data[0].data.paginated_drivers;
+                    $scope.busy = data[0].data.paginated_drivers;
                     //console.log("BUSY",$scope.busy);
 
                                 if($scope.select.selectedIndex == 1) { //|| $scope.select.selectedIndex == 3){ // for busy and all
@@ -474,13 +479,13 @@
                         for (var i = 0; i < $scope.bzy.length; i++) {
                             // var position = new google.maps.LatLng($scope.bzy[i].current_location_latitude, $scope.bzy[i].current_location_longitude);
                             //bounds.extend(position);
-                            if($scope.avail[i].car_type == 1) {
+                            if($scope.busy[i].car_type == 1) {
                                 url = 'assets/carTypeImage/QLE/2_Blue_QLE.svg';
-                            } else if($scope.avail[i].car_type == 1) {
+                            } else if($scope.busy[i].car_type == 1) {
                                 url = 'assets/img/driver_intransit.svg';
-                            } else if($scope.avail[i].car_type == 2) {
+                            } else if($scope.busy[i].car_type == 2) {
                                 url = 'assets/carTypeImage/LUXE/2_Blue_LUXE.svg';
-                            } else if($scope.avail[i].car_type == 3) {
+                            } else if($scope.busy[i].car_type == 3) {
                                 url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                             }
                             var infowindow = new google.maps.InfoWindow({
@@ -503,7 +508,7 @@
                 });
 
                 socketFactory.on('offlineDrivers', function(data) {
-                    $scope.offline=data[0].data.paginated_drivers;
+                    $scope.offline = data[0].data.paginated_drivers;
                     //console.log("BUSY",$scope.busy);
                     // var url = 'assets/img/driver_offline.svg';
                     var url;
@@ -514,13 +519,13 @@
                     };
                    
                     for (var i = 0; i < $scope.offline.length; i++) {
-                        if($scope.avail[i].car_type == 2) {
+                        if($scope.offline[i].car_type == 2) {
                             url = 'assets/carTypeImage/QLE/1_Grey_QLE.svg';
-                        } else if($scope.avail[i].car_type == 1) {
+                        } else if($scope.offline[i].car_type == 1) {
                             url = 'assets/img/driver_offline.svg';
-                        } else if($scope.avail[i].car_type == 3) {
+                        } else if($scope.offline[i].car_type == 3) {
                             url = 'assets/carTypeImage/LUXE/1_Grey_LUXE.svg';
-                        } else if($scope.avail[i].car_type == 4) {
+                        } else if($scope.offline[i].car_type == 4) {
                             url = 'assets/carTypeImage/Grande/1_Grey_Grande.svg';
                         }
                         var infowindow = new google.maps.InfoWindow({
@@ -685,23 +690,25 @@
         }
 
         $scope.showonm = function(data) {
-            // console.log("showonm", $scope.specialid, data);
-            var id;
-            if ('driver_id' in data) {
-                id = data.driver_id;
-            } else if (data.user_id) {
-                id = data.user_id;
-            }
-            if ($scope.specialid == id) {
-                directionsDisplay.setMap(null);
-                $scope.specialid = -1;
-            } else {
-                $scope.specialid = id;
-                if (data.pickup_latitude) {
-                    $scope.strtloca = data.pickup_latitude + ',' + data.pickup_longitude;
-                } else {
-                    $scope.strtloca = data.latitude + ',' + data.longitude;
+            var routeState = {}
+            if (data['session_id']) {
+                routeState = {
+                    key: 'session_id',
+                    id: data.session_id
                 }
+                $scope.strtloca = data.pickup_latitude + ',' + data.pickup_longitude;
+            } else if (data['pickup_id']) {
+                routeState = {
+                    key: 'pickup_id',
+                    id: data.pickup_id
+                }
+                $scope.strtloca = data.latitude + ',' + data.longitude;
+            }
+            if ($scope.routeState && $scope.routeState.key == routeState.key && $scope.routeState.id == routeState.id) {
+                directionsDisplay.setMap(null);
+                $scope.routeState = null;
+            } else {
+                $scope.routeState = routeState;
                 $scope.mdes = data.manual_destination_latitude + ','+ data.manual_destination_longitude;
                 $scope.getDirections();
             }
