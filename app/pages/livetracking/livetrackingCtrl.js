@@ -50,23 +50,34 @@
         $scope.expandDisc = function (daa) {
             $('#expandedDiv').css("transform", "translate(92.5%)");
             $('#expandedDiv').css("transition", "1s");
-            $('#expandedDiv').css("left", "4.5%");
+            $('#expandedDiv').css("left", "5.5%");
             //Trip_Detail
-            $scope.pickup_location_address = daa.pickup_location_address;
+            if (daa.pickup_location_address) {
+                $scope.pickup_location_address = daa.pickup_location_address;
+            } else if (daa.address) {
+                $scope.pickup_location_address = daa.address;
+            }
             $scope.manual_destination_address = daa.manual_destination_address;
-            $scope.driver_name = daa.driver_name;
+            // if (daa.driver_name) {
+                $scope.driver_name = daa.driver_name;
+            // } else if (daa.user_name) {
+                // $scope.driver_name = daa.user_name;
+            // }
             $scope.car_name = daa.car_name;
             $scope.driver_mobile = daa.driver_mobile;
-            $scope.fare_calculated = "$" + daa.fare_calculated;
-
-            if (daa.hasOwnProperty("fare_calculated"));
-            {
+            if (daa.fare_calculated) {
                 $scope.fare_calculated = "$" + daa.fare_calculated;
-            }
-            if (daa.hasOwnProperty("daa.fare_calculated") == false);
-            {
+            } else {
                 $scope.fare_calculated = "Unavailable";
             }
+            // if (daa.hasOwnProperty("fare_calculated"));
+            // {
+            //     $scope.fare_calculated = "$" + daa.fare_calculated;
+            // }
+            // if (daa.hasOwnProperty("daa.fare_calculated") == false);
+            // {
+            //     $scope.fare_calculated = "Unavailable";
+            // }
             if (daa.hasOwnProperty("session_id")) {
                 $scope.tripnumber = "Trip Number: #" + daa.session_id;
             }
@@ -81,6 +92,31 @@
             $scope.user_mobile = daa.user_mobile;
             $scope.user_email = daa.user_email;
             $scope.user_image = daa.user_image;
+
+            //History
+            if (daa.pickup_id) {
+                $scope.tripId = daa.pickup_id;
+            } else if (daa.session_id) {
+                $scope.tripId = daa.session_id;
+            } else {
+                $scope.tripId = 'Unavailable';
+            }
+            if (daa.pickup_time) {
+                $scope.data_time = daa.pickup_time;
+            } else if(daa.drop_time) {
+                $scope.data_time = daa.drop_time;
+            } else {
+                $scope.data_time = 'Unavailable';
+            }
+            if (daa.address) {
+                $scope.pickup = daa.address;
+            } else if (daa.pickup_location_address) {
+                $scope.pickup = daa.pickup_location_address;
+            } else {
+                $scope.pickup = 'Unavailable';
+            }
+            $scope.dropoff = daa.manual_destination_address;
+            $scope.fare = daa.faredata;
         }
         $scope.collapseDisc = function () {
             $scope.expand = 1;
@@ -287,6 +323,9 @@
                     completedrides.sort(comparecompleted);
                     var scheduledrides = data[0].data.SCHEDULED;
                     scheduledrides.sort(compare);
+                    if ($scope.scheduledrides && $scope.scheduledrides.length > 0) {
+                        return;
+                    }
                     $scope.completedrides = completedrides;
                     $scope.completedrides.map(ride => {
                         if (ride.driver_image) {
@@ -294,8 +333,9 @@
                         }
                     })
                     $scope.scheduledrides = scheduledrides;
-
-                    // console.log("--------------", data[0].data.COMPLETED);
+                    // console.log("--------------completed", completedrides);
+                    // console.log("--------------scheduled", scheduledrides);
+                    // console.log(JSON.stringify(scheduledrides))
                 });
                   
                   

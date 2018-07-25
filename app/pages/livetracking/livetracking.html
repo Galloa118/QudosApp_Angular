@@ -74,7 +74,7 @@
 		margin: -4px 0px 0px -10px;
 		z-index: 1;
 		overflow: hidden;
-		width: 385px;
+		width: 430px;
 		border-bottom-left-radius: 0px;
 		border-bottom-right-radius: 0px;
 		box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px 0px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 2px 1px -1px;
@@ -85,7 +85,10 @@
 	}
 	
 	.md-padding {
-		padding: 16px;
+		padding-right: 16px;
+		padding-left: 16px;
+		padding-bottom: 16px;
+		padding-top: 0px;
 	}
 	
 	#Nav {
@@ -193,6 +196,27 @@
 		opacity: 0.7;
 	}
 
+	.pickup_dropoff {
+		overflow: hidden;
+		position: relative;
+		line-height: 1.2em;
+		max-height: 26px;
+		text-align: justify;
+		margin-right: -9px;
+		padding-right: 15px;
+		font-size: 11px;
+	}
+
+	.pickup_dropoff::before {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+	}
+
+	.history-title {
+		padding: 0px;
+	}
+
 </style>
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -225,7 +249,7 @@
 								
 								<td class="tDataSelf" style="width: 100px !important;">
 									<div class="button_group" style="display: grid;">
-										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.driver_id == specialid ? 'Route On' : 'Route Off' }}
+										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ ('session_id' == routeState.key && data.session_id == routeState.id) ? 'Route On' : 'Route Off' }}
 										</button>
 										
 										<button id="but1" style="width: 90px;min-height: 28px !important;"
@@ -239,7 +263,7 @@
 								</td>
 							</tr>
 
-							<tr ng-repeat="data in completedrides" style="border-bottom: 1px solid rgba(0,0,0,.14);">
+							<!-- <tr ng-repeat="data in completedrides" style="border-bottom: 1px solid rgba(0,0,0,.14);">
 								
 								<td class="tDataSelf alignCenter">
 									<img ng-src="{{data.driver_image}}" style="border-radius:50%" height="50px" width="50px">
@@ -257,9 +281,51 @@
 								
 								<td class="tDataSelf" style="width: 100px !important;">
 									<div class="button_group" style="display: grid;">
-										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.driver_id == specialid ? 'Route On' : 'Route Off' }}
+										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ ('session_id' == routeState.key && data.session_id == routeState.id) ? 'Route On' : 'Route Off' }}
+										</button>
+										<button id="but1" style="width: 90px;min-height: 28px !important;"
+												class="btn btn-secondary">Completed
 										</button>
 										
+									</div>
+								</td>
+								<td class="tDataSelf" style="width: 10px !important;">
+									<img style="float: right;" src="assets/img/forward.svg" ng-click="expandDisc(data)">
+								</td>
+							</tr> -->
+
+							<!-- TODO: Dynamic tabs -->
+						</table>
+						<!-- <div>
+							Scheduled Rides {{totalItemsScheduled}}
+							<br>
+							Completed Rides {{totalItemsCompleted}}
+						</div> -->
+					</md-content>
+				</md-tab>
+				<md-tab label= "{{totalItemsCompleted}} COMPLETED" id="completed" ng-click="collapseDisc()" >
+					<div class="md-padding" ng-style="GENERICS.dahboard.leftPane">
+						<table>
+							<tr ng-repeat="data in completedrides" style="border-bottom: 1px solid rgba(0,0,0,.14);">
+								
+								<td class="tDataSelf alignCenter">
+									<img ng-src="{{data.driver_image}}" style="border-radius:50%" height="50px" width="50px">
+									<br>
+									<h1 class="driverNameCus">{{data.driver_name}}
+								</td>
+								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg">
+								</td>
+								
+								<td class="tDataSelf infoBlock" style="text-align: center;">
+									<h1 class="dateDetails" style="margin-top: 16px;">{{data.start_time|date:'MM/dd/yyyy'}}</h1>
+									<h1 class="dateDetails">{{data.start_time|date:'HH:mm a'}}</h1>
+									<p style="color:rgba(0,0,0,.5);">{{data.user_name}}</p>
+								</td>
+								
+								<td class="tDataSelf" style="width: 100px !important;">
+									<div class="button_group" style="display: grid;">
+										<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ ('session_id' == routeState.key && data.session_id == routeState.id) ? 'Route On' : 'Route Off' }}
+										</button>
 										<button id="but1" style="width: 90px;min-height: 28px !important;"
 												class="btn btn-secondary">Completed
 										</button>
@@ -270,35 +336,29 @@
 									<img style="float: right;" src="assets/img/forward.svg" ng-click="expandDisc(data)">
 								</td>
 							</tr>
-
-							<!-- TODO: Dynamic tabs -->
-
-
 						</table>
-						<div>
-							Scheduled Rides {{totalItemsScheduled}}
-							<br>
-							Completed Rides {{totalItemsCompleted}}
-						</div>
-					</md-content>
+					</div>
 				</md-tab>
 				<md-tab label= "{{totalItemsScheduled}} SCHEDULED" id="scheduled" ng-click="collapseDisc()" >
 					<div class="md-padding" ng-style="GENERICS.dahboard.leftPane">
 						<table>
 							<tr ng-repeat="data in scheduledrides" ng-style="dashboardCss.scheduled_rides">
-								<td class="tDataSelf"><button type="button" ng-style="GENERICS.dashboard.discountBtn" class="btn" id="butOne">S</button><br>
+								<!-- <td class="tDataSelf"><button type="button" ng-style="GENERICS.dashboard.discountBtn" class="btn" id="butOne">S</button><br>
 									<h1 class="driverNameCus">{{data.user_name}}</h1>
+								</td> -->
+								<td class="tDataSelf" style="width: 100px !important;">
+									<p class="pickup_dropoff" style="margin-top: 20px; color: green;">{{data.address}}</p>
+									<p class="pickup_dropoff" style="color: blue;">{{data.manual_destination_address}}</p>
 								</td>
-
 								<td class="tDataSelf"><img style="margin-top:-10%;" src="assets/img/timeline-line.svg"></td>
 
 								<td class="tDataSelf" style="padding-left:5%!important">
 									<h1 class="dateDetails">{{data.pickup_time|date:'MM/dd/yyyy'}}</h1>
-									<p>{{data.pickup_time|	date:'HH:mm a'}}</p>{{data.user_name}}
+									<p>{{data.pickup_time|date:'HH:mm a'}}</p>{{data.user_name}}
 								</td>
 								
-								<td class="tDataSelf" ng-if="expand">
-									<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ data.user_id == specialid ? 'Route On' : 'Route Off' }}
+								<td class="tDataSelf" ng-if="expand" style="width: 100px !important;">
+									<button id="but_route" style="width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-secondary">{{ ('pickup_id' == routeState.key && data.pickup_id == routeState.id) ? 'Route On' : 'Route Off' }}
 									</button>
 									<button id="but2" style="background-color:rgb(16, 108, 200); color: white; width: 90px;min-height: 28px !important; margin-bottom: 6px;" ng-click="showonm(data)" class="btn btn-primary">Scheduled</button>
 									<br>
@@ -353,27 +413,29 @@
 							<md-tabs md-dynamic-height md-border-bottom>
 								<md-tab label="Trip Details">
 									<md-content class="md-padding">
-										<div class="formLeft col-lg-6 col-sm-6 col-md-6 col-xs-12"
+										<div class="formLeft col-lg-12 col-sm-12 col-md-12 col-xs-12"
 										     style="margin-top: 6%; float:none;">
 											<label style="font-size: 14px;font-weight: 500;color: #000000!important">Pickup</label><br>
-											<input style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
-											       type="text" placeholder="07:10 pm" maxlength="20" required
+											<!-- <input style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											       type="text" placeholder="" maxlength="20" required
 											       onkeypress="return FirsText(event)"
-											       style="text-transform:capitalize">
-											<input style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;width:100%"
+											       style="text-transform:capitalize"> -->
+											<!-- <input style="width: 100%;border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;width:100%"
 											       type="text" placeholder="Unavailable" maxlength="30"
 											       ng-model="pickup_location_address" required
 											       onkeypress="return FirsText(event)"
-											       style="text-transform:capitalize">
+												   style="text-transform:capitalize"> -->
+											<label style="background-color: #f9f9f9;font-size: 12px;color: #989898">{{pickup_location_address}}</label>
 										</div>
-										<div class="formLeft col-lg-6 col-sm-6 col-md-6 col-xs-12"
+										<div class="formLeft col-lg-12 col-sm-12 col-md-12 col-xs-12"
 										     style="margin-top: 6%; float:none;">
 											<label style="font-size: 14px;font-weight: 500;color: #000000!important">Destination</label><br>
-											<input style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											<label style="background-color: #f9f9f9;font-size: 12px;color: #989898">{{manual_destination_address}}</label>
+											<!-- <input style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;           width: 100%"
 											       type="text" placeholder="Unavailable"
 											       ng-model="manual_destination_address" maxlength="20" required
 											       onkeypress="return FirsText(event)"
-											       style="text-transform:capitalize">
+											       style="text-transform:capitalize;"> -->
 										</div>
 										<div class="formLeft col-lg-6 col-sm-6 col-md-6 col-xs-12"
 										     style="margin-top: 6%; float:none;">
@@ -423,7 +485,7 @@
 								
 								<md-tab label="Customer">
 									<md-content class="md-padding">
-										<img ng-if="user_image" ng-src="{{user_image}}" height="120px"
+										<img ng-if="user_image" ng-src="{{user_image}}" height="120px" width="120px"
 										     style="border-radius:50%;" class="center-block">
 										<div class="formLeft col-lg-6 col-sm-6 col-md-6 col-xs-12"
 										     style="margin-top: 6%; float:none;">
@@ -467,10 +529,70 @@
 										</div>
 									</md-content>
 								</md-tab>
+
 								<!--History-->
+
 								<md-tab label="History">
 									<md-content class="md-padding">
-										<p>Not Available</p>
+										<div class="formLeft col-lg-12 col-sm-12 col-md-12 col-xs-12" style="padding-top: 10px;">
+											<div class="history-title col-lg-4 col-sm-4 col-md-4 col-xs-12">
+												<label style="font-size: 12px;color: #989898;">COMPLETED</label>
+											</div>
+											<div class="history-title col-lg-4 col-sm-4 col-md-4 col-xs-12">
+												<label style="font-size: 12px;color: blue;">SCHEDULED</label>
+											</div>
+											<div class="history-title col-lg-4 col-sm-4 col-md-4 col-xs-12">
+												<label style="font-size: 12px;font-weight: 500;color: #000000!important">TOTAL</label>
+											</div>
+										</div>
+
+										<div class="formLeft col-lg-3 col-sm-3 col-md-3 col-xs-12"
+											 style="margin-top: 6%;">
+											<label style="font-size: 14px;font-weight: 500;color: #000000!important">Trip ID</label><br>
+											<label style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;">{{tripId}}</label>
+											<!-- <input disabled
+											       style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											       type="text" placeholder="Unavailable" ng-model="tripId"
+											       maxlength="20" required onkeypress="return FirsText(event)"
+											       style="text-transform:capitalize"> -->
+										</div>
+										<div class="formLeft col-lg-7 col-sm-7 col-md-7 col-xs-12"
+											 style="margin-top: 6%;">
+											<label style="font-size: 14px;font-weight: 500;color: #000000!important">Date and Time</label><br>
+											<label style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;">{{data_time}}</label>
+											<!-- <input disabled
+											       style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											       type="text" placeholder="" ng-model="data_time" maxlength="20"
+											       required onkeypress="return FirsText(event)"
+											       style="text-transform:capitalize"> -->
+										</div>
+										<!-- <div class="formLeft col-lg-12 col-sm-12 col-md-12 col-xs-12"
+										     style="margin-top: 6%; float:none;">
+											<label style="font-size: 14px;font-weight: 500;color: #000000!important">
+												Pickup and Dropoff</label><br>
+												<label style="background-color: #f9f9f9;font-size: 12px;color: #989898">- {{pickup}}</label>
+												<label style="background-color: #f9f9f9;font-size: 12px;color: #989898">- {{dropoff}}</label> -->
+											<!-- <input disabled
+											       style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											       type="text" placeholder="Unavailable" maxlength="50"
+											       ng-model="pickup" required onkeypress="return FirsText(event)"
+												   style="text-transform:capitalize">
+											<input disabled
+												   style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+												   type="text" placeholder="Unavailable" maxlength="50"
+												   ng-model="dropoff" required onkeypress="return FirsText(event)"
+												   style="text-transform:capitalize"> -->
+										<!-- </div> -->
+										<div class="formLeft col-lg-2 col-sm-2 col-md-2 col-xs-12"
+											 style="margin-top: 6%;">
+											<label style="font-size: 14px;font-weight: 500;color: #000000!important">Fare</label><br>
+											<label style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;">Unavailable</label>
+											<!-- <input disabled
+											       style="border: none;background-color: #f9f9f9;font-size: 12px;color: #989898;"
+											       type="text" placeholder="Unavailable" ng-model="fare"
+											       maxlength="20" required onkeypress="return FirsText(event)"
+												   style="text-transform:capitalize"> -->
+										</div>
 									</md-content>
 								</md-tab>
 							</md-tabs>
