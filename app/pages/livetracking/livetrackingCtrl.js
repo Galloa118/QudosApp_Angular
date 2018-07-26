@@ -50,7 +50,7 @@
         $scope.expandDisc = function (daa) {
             $('#expandedDiv').css("transform", "translate(92.5%)");
             $('#expandedDiv').css("transition", "1s");
-            $('#expandedDiv').css("left", "5.5%");
+            $('#expandedDiv').css("left", "36px");
             //Trip_Detail
             if (daa.pickup_location_address) {
                 $scope.pickup_location_address = daa.pickup_location_address;
@@ -95,28 +95,52 @@
 
             //History
             if (daa.pickup_id) {
-                $scope.tripId = daa.pickup_id;
+                var scheduledrides_history = $scope.scheduledrides;
+                let schhistory = [];
+                for (let ride_history of scheduledrides_history) {
+                    if (daa.user_id == ride_history.user_id) {
+                        ride_history = {...ride_history}
+                        schhistory.push(ride_history);
+                    } else {
+                        continue;
+                    }
+                }
+                $scope.rideshistory = schhistory;
             } else if (daa.session_id) {
-                $scope.tripId = daa.session_id;
-            } else {
-                $scope.tripId = 'Unavailable';
-            }
-            if (daa.pickup_time) {
-                $scope.data_time = daa.pickup_time;
-            } else if(daa.drop_time) {
-                $scope.data_time = daa.drop_time;
-            } else {
-                $scope.data_time = 'Unavailable';
-            }
-            if (daa.address) {
-                $scope.pickup = daa.address;
-            } else if (daa.pickup_location_address) {
-                $scope.pickup = daa.pickup_location_address;
-            } else {
-                $scope.pickup = 'Unavailable';
-            }
-            $scope.dropoff = daa.manual_destination_address;
-            $scope.fare = daa.faredata;
+                var completedrides_history = $scope.completedrides;
+                var total = 0;
+                let comhistory = [];
+                for (let ride_history of completedrides_history) {
+                    if (daa.driver_id == ride_history.driver_id) {
+                        ride_history = {...ride_history}
+                        comhistory.push(ride_history);
+                        total = total + ride_history.fare_calculated;
+                    } else {
+                        continue;
+                    }
+                }
+                // console.log("----history", comhistory);
+                // console.log("----total", total);
+                $scope.rideshistory = comhistory;
+                $scope.faretotal = total;
+            } 
+
+            // if (daa.pickup_time) {
+            //     $scope.data_time = daa.pickup_time;
+            // } else if(daa.drop_time) {
+            //     $scope.data_time = daa.drop_time;
+            // } else {
+            //     $scope.data_time = 'Unavailable';
+            // }
+            // if (daa.address) {
+            //     $scope.pickup = daa.address;
+            // } else if (daa.pickup_location_address) {
+            //     $scope.pickup = daa.pickup_location_address;
+            // } else {
+            //     $scope.pickup = 'Unavailable';
+            // }
+            // $scope.dropoff = daa.manual_destination_address;
+            // $scope.fare = daa.faredata;
         }
         $scope.collapseDisc = function () {
             $scope.expand = 1;
