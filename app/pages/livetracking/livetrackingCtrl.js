@@ -165,8 +165,8 @@
                 if (markerImg) {
                     var deg = driverMarker.path[0][1];
                     markerImg.style.transform = 'rotate(' + deg + 'deg)'
-                    driverMarker.path.splice(0, 1);
                 }
+                driverMarker.path.splice(0, 1);
                 setTimeout(function() {
                     move(driverMarker, wait); 
                 }, wait);
@@ -231,7 +231,7 @@
                     position: location,
                     icon: image,
                     map: map,
-                    infoWindow: infowindow
+                    infoWindow: infowindow,
                 });
                 marker.addListener('click', function (e) {
                     marker.infoWindow.open(map, this);
@@ -247,17 +247,18 @@
                     path: [],
                     isMoving: false,
                 });
-                var contentDiv = $('.gm-style-iw');
-                contentDiv.next('div').hide();
-                contentDiv.prev('div.custom-close').remove();
-                var closeBtn =
-                    `<div class="custom-close" id="${driverData.driver_id}">
-                        <img alt="" src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png" draggable="false" style="position: absolute; left: -2px; top: -336px; width: 59px; height: 492px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;">
-                    </div>`;
-                $(closeBtn).insertBefore(contentDiv)
-                $('div.custom-close').bind('click', function(e) {
-                    $(e.target).parent().parent().css({opacity: 0})
-
+                setTimeout(function() {
+                    var contentDiv = $('.gm-style-iw');
+                    contentDiv.next('div').hide();
+                    contentDiv.prev('div.custom-close').remove();
+                    var closeBtn =
+                        `<div class="custom-close" id="${driverData.driver_id}">
+                            <img alt="" src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png" draggable="false" style="position: absolute; left: -2px; top: -336px; width: 59px; height: 492px; user-select: none; border: 0px; padding: 0px; margin: 0px; max-width: none;">
+                        </div>`;
+                    $(closeBtn).insertBefore(contentDiv)
+                    $('div.custom-close').bind('click', function(e) {
+                        $(e.target).parent().parent().css({opacity: 0})
+                    });
                 });
             }
             return marker;
@@ -444,11 +445,12 @@
                             urlGoing = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                         }
                         var infowindow = new google.maps.InfoWindow({
-                            content: "<div id='" + $scope.avail[i].driver_id + "'>" +
+                            content: "<div id='" + $scope.avail[i].driver_id + "' style='font-size: 9px;'>" +
                             "<span>Name</span> : <span>" + $scope.avail[i].driver_name + "</span><br>" +
                             "<span>Email</span> : <span>" + $scope.avail[i].driver_email + "</span><br>" +
                             "<span>Mobile</span> : <span>" + $scope.avail[i].driver_mobile + "</span>" +
-                            "</div>"
+                            "</div>",
+                            disableAutoPan: true
                         });
                         image.url = `${url}#${$scope.avail[i].driver_id}`;
                         if (ongoingDriverIds.includes($scope.avail[i].driver_id)) {
@@ -501,11 +503,12 @@
                                 url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                             }
                             var infowindow = new google.maps.InfoWindow({
-                                content: "<div>" +
+                                content: "<div style='font-size: 9px;'>" +
                                 "<span>Name</span> : <span>" + $scope.busy[i].driver_name + "</span><br>" +
                                 "<span>Email</span> : <span>" + $scope.busy[i].driver_email + "</span><br>" +
                                 "<span>Mobile</span> : <span>" + $scope.busy[i].driver_mobile + "</span>" +
-                                "</div>"
+                                "</div>",
+                                disableAutoPan: true
                             });
                             image.url = `${url}#${$scope.busy[i].driver_id}`;
                                         //   setMarker($scope.busy[i], { image, infowindow, rotation })
@@ -553,11 +556,12 @@
                                 url = 'assets/carTypeImage/Grande/2_Blue_Grande.svg';
                             }
                             var infowindow = new google.maps.InfoWindow({
-                                content: "<div>" +
+                                content: "<div style='font-size: 9px;'>" +
                                 "<span>Name</span> : <span>" + $scope.busy[i].driver_name + "</span><br>" +
                                 "<span>Email</span> : <span>" + $scope.busy[i].driver_email + "</span><br>" +
                                 "<span>Mobile</span> : <span>" + $scope.busy[i].driver_mobile + "</span>" +
-                                "</div>"
+                                "</div>",
+                                disableAutoPan: true
                             });
                             image.url = `${url}#${$scope.busy[i].driver_id}`;
                             setMarker($scope.busy[i], { image, infowindow, rotation })
@@ -593,11 +597,12 @@
                             url = 'assets/carTypeImage/Grande/1_Grey_Grande.svg';
                         }
                         var infowindow = new google.maps.InfoWindow({
-                            content: "<div>" +
+                            content: "<div style='font-size: 9px;'>" +
                             "<span>Name</span> : <span>" + $scope.offline[i].driver_name + "</span><br>" +
                             "<span>Email</span> : <span>" + $scope.offline[i].driver_email + "</span><br>" +
                             "<span>Mobile</span> : <span>" + $scope.offline[i].driver_mobile + "</span>" +
-                            "</div>"
+                            "</div>",
+                            disableAutoPan: true
                         });
                         image.url = `${url}#${$scope.offline[i].driver_id}`;
                         setMarker($scope.offline[i], { image, infowindow, rotation })
